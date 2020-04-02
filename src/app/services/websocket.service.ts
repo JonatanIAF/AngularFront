@@ -5,23 +5,22 @@ import { Socket } from 'ngx-socket-io';
   providedIn: 'root'
 })
 export class WebsocketService {
-  public socketStatus=false;
+  public socketStatus = false;
+  constructor(
+    private socket: Socket,
+    ) {
+      this.checkStatus();
+    }
 
-  constructor(private socket: Socket,) {
-    this.checkStatus();
+    checkStatus(){
+      this.socket.on('connect', () => {
+        console.log('Conectado al servidor');
+        this.socketStatus = true;
+      });
+
+      this.socket.on('disconnect', () => {
+        console.log('Desconectado del servidor');
+        this.socketStatus = false;
+      });
+    }
    }
-
-
-   checkStatus(){
-     this.socket.on('conectado', ()=>{
-       console.log('Conectado al servidor');
-       this.socketStatus=true;
-     });
-
-     this.socket.on('desconectado', ()=>{
-       console.log('Desconectado del servidor');
-       this.socketStatus=false;
-     });
-      
-   }
-}
